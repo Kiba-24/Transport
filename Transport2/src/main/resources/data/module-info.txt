@@ -1,0 +1,24 @@
+module Transport2 {
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires javafx.web;
+
+    requires org.controlsfx.controls;
+    requires com.dlsc.formsfx;
+    requires net.synedra.validatorfx;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.bootstrapfx.core;
+    requires eu.hansolo.tilesfx;
+    requires com.almasb.fxgl.all;
+    requires com.opencsv;
+
+    opens client2 to javafx.fxml;
+    opens client2.controllers to javafx.fxml;
+    exports server2;
+    exports client2;
+    exports client2.controllers;
+    //opens client to javafx.fxml;java --module-path out --list-modules
+    //exports client;
+    //exports model;
+    //opens model to javafx.fxml;
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/11"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="client2.controllers.SearchController">
+
+    <Label text="Отправление:"/>
+    <TextField fx:id="departureField"/>
+
+    <Label text="Прибытие:"/>
+    <TextField fx:id="arrivalField"/>
+
+    <Label text="Дата отправления:"/>
+    <DatePicker fx:id="datePicker"/>
+
+    <Label text="Время отправления:"/>
+    <HBox spacing="10">
+        <ComboBox fx:id="hourComboBox" promptText="Часы"/>
+        <ComboBox fx:id="minuteComboBox" promptText="Минуты"/>
+    </HBox>
+
+    <Label text="Тип транспорта:"/>
+    <ComboBox fx:id="transportTypeComboBox"/>
+    <Label text="Максимальная цена:"/>
+    <TextField fx:id="maxPriceField"/>
+    <Label text="Макс. пересадок:"/>
+    <Spinner fx:id="transfersSpinner"/>
+
+    <Button text="Найти отправления" onAction="#handleComplexSearch"/>
+    <ListView fx:id="routesList"/>
+</VBox>

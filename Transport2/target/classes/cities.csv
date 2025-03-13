@@ -1,0 +1,14 @@
+id,city_name,country,timezone
+1,Москва,Россия,Europe/Moscow
+2,Санкт-Петербург,Россия,Europe/Moscow
+3,Новосибирск,Россия,Asia/Novosibirsk
+4,Сочи,Россия,Europe/Moscow
+5,Екатеринбург,Россия,Asia/Yekaterinburg
+6,Киев,Украина,Europe/Kyiv
+7,Минск,Беларусь,Europe/Minsk
+8,Алматы,Казахстан,Asia/Almaty
+9,Берлин,Германия,Europe/Berlin
+10,Париж,Франция,Europe/Paris
+11,Нью-Йорк,США,America/New_York
+12,Стамбул,Турция,Europe/Istanbul
+13,Прага,Чехия,Europe/Prague

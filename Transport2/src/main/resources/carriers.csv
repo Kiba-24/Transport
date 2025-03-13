@@ -1,0 +1,10 @@
+id,carrier_name,transport_type,website
+1,Аэрофлот,Авия,https://www.aeroflot.ru
+2,РЖД,Ж/Д,https://www.rzd.ru
+3,Автолайн,Автобус,https://avtoline.ru
+4,S7 Airlines,Авия,https://www.s7.ru
+5,ТрансКласс,Ж/Д,https://transclass.ru
+6,Газель,Автобус,https://gazel-bus.ru
+7,UIA,Авия,https://www.flyuia.com
+8,Belavia,Авия,https://belavia.by
+9,EuroLines,Автобус,https://eurolines.com
