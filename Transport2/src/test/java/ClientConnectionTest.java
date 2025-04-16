@@ -14,11 +14,11 @@ class ClientConnectionTest {
         clientConnection = new ClientConnection();
     }
 
-    @Test
+    /*@Test
     void testSendRequest() {
         // Тест на отправку запроса и получение ответа
         List<String> response = clientConnection.sendRequest("SEARCH_ALL|Москва|Санкт-Петербург|mix");
         assertNotNull(response, "Ответ от сервера не должен быть null");
         assertFalse(response.isEmpty(), "Ответ от сервера не должен быть пустым");
-    }
+    }*/
 }

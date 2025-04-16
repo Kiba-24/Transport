@@ -12,3 +12,15 @@ id,city_name,country,timezone
 11,Нью-Йорк,США,America/New_York
 12,Стамбул,Турция,Europe/Istanbul
 13,Прага,Чехия,Europe/Prague
+14,Рим,Италия,Europe/Rome
+15,Мадрид,Испания,Europe/Madrid
+16,Лондон,Великобритания,Europe/London
+17,Токио,Япония,Asia/Tokyo
+18,Пекин,Китай,Asia/Shanghai
+19,Дубай,ОАЭ,Asia/Dubai
+20,Сидней,Австралия,Australia/Sydney
+21,Варшава,Польша,Europe/Warsaw
+22,Вена,Австрия,Europe/Vienna
+23,Амстердам,Нидерланды,Europe/Amsterdam
+24,Лиссабон,Португалия,Europe/Lisbon
+25,Афины,Греция,Europe/Athens

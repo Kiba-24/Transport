@@ -1,6 +1,5 @@
 package server2;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,9 @@ public class Route {
     private Carrier carrier;
     private City departureCity;
     private City arrivalCity;
-    private int durationMinutes;
+    private long durationMinutes;
     private double basePrice;
+
     @Override
     public String toString() {
         return String.format("%s → %s (%s, %d мин, %.2f руб)",
@@ -27,5 +27,4 @@ public class Route {
     public String getTransportType() {
         return carrier.getTransportType();
     }
-
 }

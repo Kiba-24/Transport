@@ -1,33 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/11"
+<VBox spacing="20" xmlns="http://javafx.com/javafx/11"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="client2.controllers.SearchController">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-    <Label text="Отправление:"/>
-    <TextField fx:id="departureField"/>
+    <Label text="Поиск маршрутов" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2F4F4F;">
+        <font><Font name="Arial Rounded MT Bold"/></font>
+    </Label>
 
-    <Label text="Прибытие:"/>
-    <TextField fx:id="arrivalField"/>
+    <GridPane hgap="15" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="50"/>
+            <ColumnConstraints percentWidth="50"/>
+        </columnConstraints>
 
-    <Label text="Дата отправления:"/>
-    <DatePicker fx:id="datePicker"/>
+        <children>
+            <Label text="Отправление:" style="-fx-font-size: 14;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="departureField" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 
-    <Label text="Время отправления:"/>
-    <HBox spacing="10">
-        <ComboBox fx:id="hourComboBox" promptText="Часы"/>
-        <ComboBox fx:id="minuteComboBox" promptText="Минуты"/>
+            <Label text="Прибытие:" style="-fx-font-size: 14;" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <TextField fx:id="arrivalField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Дата отправления:" style="-fx-font-size: 14;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="datePicker" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+
+            <Label text="Время отправления:" style="-fx-font-size: 14;" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1">
+                <children>
+                    <ComboBox fx:id="hourComboBox" prefWidth="80"/>
+                    <ComboBox fx:id="minuteComboBox" prefWidth="80"/>
+                </children>
+            </HBox>
+
+            <Label text="Тип транспорта:" style="-fx-font-size: 14;" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="transportTypeComboBox" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+
+            <Label text="Макс. пересадок:" style="-fx-font-size: 14;" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            <Spinner fx:id="transfersSpinner" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        </children>
+    </GridPane>
+
+    <!-- Остальная часть файла остается без изменений -->
+    <HBox spacing="15" alignment="CENTER">
+        <children>
+            <Button text="Найти прямые рейсы" onAction="#handleSearchClosest"
+                    style="-fx-font-weight: bold; -fx-background-color: #87CEEB; -fx-text-fill: white;"/>
+            <Button text="Найти с пересадками" onAction="#handleSearchComplex"
+                    style="-fx-font-weight: bold; -fx-background-color: #4682B4; -fx-text-fill: white;"/>
+            <Button fx:id="openAllRoutesButton" text="Все маршруты"
+                    style="-fx-background-color: #B0E0E6; -fx-font-weight: bold;"
+                    onAction="#openAllRoutesSearchWindow"/>
+        </children>
     </HBox>
 
-    <Label text="Тип транспорта:"/>
-    <ComboBox fx:id="transportTypeComboBox"/>
-    <Label text="Максимальная цена:"/>
-    <TextField fx:id="maxPriceField"/>
-    <Label text="Макс. пересадок:"/>
-    <Spinner fx:id="transfersSpinner"/>
+    <HBox spacing="20" alignment="CENTER" prefHeight="400">
+        <children>
+            <VBox spacing="10" prefWidth="400">
+                <children>
+                    <Label text="Найденные маршруты:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <ListView fx:id="routesList" onMouseClicked="#handleRouteSelection"
+                              prefHeight="300" style="-fx-font-family: 'Verdana';"/>
+                </children>
+            </VBox>
 
-    <Button text="Найти отправления" onAction="#handleComplexSearch"/>
-    <ListView fx:id="routesList"/>
+            <VBox spacing="10" prefWidth="400">
+                <children>
+                    <Label text="Ваши бронирования:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <ListView fx:id="bookedList" prefHeight="250" style="-fx-font-family: 'Verdana';"/>
+                    <Button fx:id="cancelBookingButton" text="Отменить бронь"
+                            style="-fx-background-color: #FFA07A; -fx-font-weight: bold;"
+                            onAction="#handleCancelBooking"/>
+                </children>
+            </VBox>
+        </children>
+    </HBox>
+
+    <StackPane>
+        <children>
+            <ProgressIndicator fx:id="loadingIndicator" visible="false"/>
+        </children>
+    </StackPane>
 </VBox>

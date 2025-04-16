@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/11"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="client2.controllers.AllRoutesSearchController">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <children>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <children>
+                <Label text="Все доступные маршруты" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2F4F4F;">
+                    <font><Font name="Arial Rounded MT Bold"/></font>
+                </Label>
+                <Button fx:id="backButton" text="Назад" onAction="#handleBack"
+                        style="-fx-font-size: 14; -fx-background-color: #B0C4DE; -fx-font-weight: bold;"/>
+            </children>
+        </HBox>
+
+        <ListView fx:id="allRoutesList" prefWidth="800" prefHeight="500"
+                  style="-fx-font-family: 'Verdana'; -fx-font-size: 13;"/>
+
+        <StackPane>
+            <children>
+                <ProgressIndicator fx:id="loadingIndicator" visible="false"/>
+            </children>
+        </StackPane>
+    </children>
+</VBox>

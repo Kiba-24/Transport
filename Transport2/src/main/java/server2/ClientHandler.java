@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class ClientHandler extends Thread {
@@ -39,6 +41,9 @@ public class ClientHandler extends Thread {
                     case "BOOK":
                         handleBooking(parts, out);
                         break;
+                    case "CHECK_SEATS": // Добавляем новый case
+                        handleCheckSeats(parts, out);
+                        break;
                     case "CANCEL":
                         handleCancel(parts, out);
                         break;
@@ -52,23 +57,32 @@ public class ClientHandler extends Thread {
     }
 
     private void handleSearchClosest(String[] params, PrintWriter out) {
-        if (params.length < 5) {
-            out.println("ERROR|Invalid parameters");
-            return;
-        }
-        String departure = params[1];
-        String arrival = params[2];
-        LocalDateTime desiredTime = LocalDateTime.parse(params[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        String transportType = params[4];
+        CompletableFuture.runAsync(() -> {
+            if (params.length < 5) {
+                out.println("ERROR|Invalid parameters");
+                return;
+            }
+            String departure = params[1];
+            String arrival = params[2];
+            LocalDateTime desiredTime = LocalDateTime.parse(params[3], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            String transportType = params[4];
 
-        List<Schedule> closestRoutes = repository.getAllSchedules().stream()
-                .filter(s -> s.getRoute().getDepartureCity().getName().equalsIgnoreCase(departure))
-                .filter(s -> s.getRoute().getArrivalCity().getName().equalsIgnoreCase(arrival))
-                .filter(s -> transportType.equals("mix") || s.getRoute().getTransportType().equalsIgnoreCase(transportType))
-                .sorted((s1, s2) -> s1.getDepartureTime().compareTo(s2.getDepartureTime()))
-                .collect(Collectors.toList());
+            List<Schedule> closestRoutes = repository.getAllSchedules().stream()
+                    .filter(s -> s.getRoute().getDepartureCity().getName().equalsIgnoreCase(departure))
+                    .filter(s -> s.getRoute().getArrivalCity().getName().equalsIgnoreCase(arrival))
+                    .filter(s -> s.getDepartureTime().toLocalDate().equals(desiredTime.toLocalDate()))
+                    .filter(s -> transportType.equals("mix") || s.getRoute().getTransportType().equalsIgnoreCase(transportType))
+                    .sorted(Comparator.comparing(Schedule::getDepartureTime))
+                    .collect(Collectors.toList());
 
-        sendSchedules(out, closestRoutes);
+            sendSchedules(out, closestRoutes);
+        });
+    }
+
+    private void sendSchedules(PrintWriter out, List<Schedule> schedules) {
+        System.out.println("Отправляю маршрутов: " + schedules.size()); // Логирование
+        schedules.forEach(schedule -> out.println(scheduleToString(schedule)));
+        out.println("END");
     }
 
     private void handleSearchAll(String[] params, PrintWriter out) {
@@ -81,20 +95,12 @@ public class ClientHandler extends Thread {
         String transportType = params[3];
 
         List<Schedule> allRoutes = repository.getAllSchedules().stream()
-                .filter(s -> s.getRoute().getDepartureCity().getName().equalsIgnoreCase(departure))
-                .filter(s -> s.getRoute().getArrivalCity().getName().equalsIgnoreCase(arrival))
                 .filter(s -> transportType.equals("mix") || s.getRoute().getTransportType().equalsIgnoreCase(transportType))
                 .collect(Collectors.toList());
 
         sendSchedules(out, allRoutes);
     }
 
-    private void sendSchedules(PrintWriter out, List<Schedule> schedules) {
-        for (Schedule schedule : schedules) {
-            out.println(scheduleToString(schedule));
-        }
-        out.println("END");
-    }
 
     private String scheduleToString(Schedule schedule) {
         return String.join("|",
@@ -104,32 +110,60 @@ public class ClientHandler extends Thread {
                 schedule.getRoute().getArrivalCity().getName(),
                 schedule.getDepartureTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                 schedule.getArrivalTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                String.valueOf(schedule.getAvailableSeats()));
+                String.valueOf(schedule.getAvailableSeats()) // Важно: отправляем актуальное кол-во мест
+        );
     }
 
     private void handleBooking(String[] params, PrintWriter out) {
-        if (params.length < 2) {
-            out.println("ERROR|Invalid parameters");
+        if (params.length < 3) {
+            out.println("ERROR|Неверный формат бронирования");
+            out.println("END");
             return;
         }
         int routeId = Integer.parseInt(params[1]);
-        Schedule schedule = repository.findScheduleByRouteId(routeId);
-        if (schedule != null && schedule.getAvailableSeats() > 0) {
-            schedule.setAvailableSeats(schedule.getAvailableSeats() - 1);
-            repository.saveSchedules();
-            out.println("SUCCESS");
-        } else {
-            out.println("ERROR|No available seats");
+        LocalDateTime departureTime = LocalDateTime.parse(params[2], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        synchronized (repository) {
+            // Используем новый метод поиска расписания по routeId и departureTime
+            Schedule schedule = repository.findScheduleByRoute(routeId, departureTime);
+            if (schedule != null && schedule.getAvailableSeats() > 0) {
+                schedule.setAvailableSeats(schedule.getAvailableSeats() - 1);
+                repository.saveSchedules();
+                out.println("SUCCESS");
+            } else {
+                out.println("ERROR|No seats");
+            }
+            out.println("END");
         }
     }
 
-    private void handleCancel(String[] params, PrintWriter out) {
-        if (params.length < 2) {
-            out.println("ERROR|Invalid parameters");
+    // Обработка проверки доступных мест
+    private void handleCheckSeats(String[] params, PrintWriter out) {
+        if (params.length < 3) {
+            out.println("ERROR|Неверный формат проверки мест");
+            out.println("END");
             return;
         }
         int routeId = Integer.parseInt(params[1]);
-        Schedule schedule = repository.findScheduleByRouteId(routeId);
+        LocalDateTime departureTime = LocalDateTime.parse(params[2], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        Schedule schedule = repository.findScheduleByRoute(routeId, departureTime);
+        if (schedule != null) {
+            out.println("SEATS|" + schedule.getAvailableSeats());
+        } else {
+            out.println("ERROR|Route not found");
+        }
+        out.println("END");
+    }
+
+    // Обработка отмены бронирования
+    private void handleCancel(String[] params, PrintWriter out) {
+        if (params.length < 3) {
+            out.println("ERROR|Неверный формат отмены");
+            out.println("END");
+            return;
+        }
+        int routeId = Integer.parseInt(params[1]);
+        LocalDateTime departureTime = LocalDateTime.parse(params[2], DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        Schedule schedule = repository.findScheduleByRoute(routeId, departureTime);
         if (schedule != null) {
             schedule.setAvailableSeats(schedule.getAvailableSeats() + 1);
             repository.saveSchedules();
@@ -137,5 +171,6 @@ public class ClientHandler extends Thread {
         } else {
             out.println("ERROR|Route not found");
         }
+        out.println("END");
     }
 }

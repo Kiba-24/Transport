@@ -18,6 +18,7 @@ public class MainApp extends Application {
         Parent root = loader.load();
         primaryStage.setTitle("Transport Marketplace");
         primaryStage.setScene(new Scene(root, 600, 600));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox spacing="10" xmlns="http://javafx.com/javafx/11"
+<VBox spacing="20" xmlns="http://javafx.com/javafx/11"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="client2.controllers.BookingController">
+    <padding><Insets top="20" right="30" bottom="20" left="30"/></padding>
 
-    <Label text="Выбранный маршрут:"/>
-    <Label fx:id="routeInfoLabel"/>
-    <Button text="Подтвердить бронирование" onAction="#handleConfirmBooking"/>
-    <Button text="Отмена" onAction="#handleCancel"/>
+    <children>
+        <Label text="Подтверждение бронирования" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #2E8B57;">
+            <font><Font name="Arial Rounded MT Bold"/></font>
+        </Label>
+
+        <Label text="Маршрут:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Label fx:id="routeInfoLabel" style="-fx-font-family: 'Verdana'; -fx-font-size: 14; -fx-wrap-text: true;"/>
+
+        <Label text="Статус:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Label fx:id="seatsInfoLabel" style="-fx-font-family: 'Verdana'; -fx-font-size: 14;"/>
+
+        <HBox spacing="30" alignment="CENTER">
+            <children>
+                <Button fx:id="confirmButton" text="Подтвердить" onAction="#handleConfirmBooking"
+                        style="-fx-font-size: 14; -fx-background-color: #3CB371; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Отмена" onAction="#handleCancel"
+                        style="-fx-font-size: 14; -fx-background-color: #CD5C5C; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            </children>
+        </HBox>
+    </children>
 </VBox>

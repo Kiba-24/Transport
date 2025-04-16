@@ -1,10 +1,21 @@
 id,carrier_name,transport_type,website
-1,Аэрофлот,Авия,https://www.aeroflot.ru
+1,Аэрофлот,Авиа,https://www.aeroflot.ru
 2,РЖД,Ж/Д,https://www.rzd.ru
 3,Автолайн,Автобус,https://avtoline.ru
-4,S7 Airlines,Авия,https://www.s7.ru
+4,S7 Airlines,Авиа,https://www.s7.ru
 5,ТрансКласс,Ж/Д,https://transclass.ru
 6,Газель,Автобус,https://gazel-bus.ru
-7,UIA,Авия,https://www.flyuia.com
-8,Belavia,Авия,https://belavia.by
+7,UIA,Авиа,https://www.flyuia.com
+8,Belavia,Авиа,https://belavia.by
 9,EuroLines,Автобус,https://eurolines.com
+10,Lufthansa,Авиа,https://www.lufthansa.com
+11,Air France,Авиа,https://www.airfrance.com
+12,Emirates,Авиа,https://www.emirates.com
+13,Qatar Airways,Авиа,https://www.qatarairways.com
+14,Turkish Airlines,Авиа,https://www.turkishairlines.com
+15,FlixBus,Автобус,https://www.flixbus.com
+16,RegioJet,Ж/Д,https://www.regiojet.com
+17,Leo Express,Ж/Д,https://www.leoexpress.com
+18,Ryanair,Авиа,https://www.ryanair.com
+19,EasyJet,Авиа,https://www.easyjet.com
+20,Blablacar,Автобус,https://www.blablacar.com
