@@ -36,16 +36,20 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build and analyze
+      - name: Find pom.xml and run SonarQube
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          echo "Switching to Transport2 directory"
-          cd Transport2
+          # Находим папку, где лежит pom.xml
+          POM_DIR=$(find . -name "pom.xml" -exec dirname {} \; | head -n 1)
+          echo "Found pom.xml in: $POM_DIR"
+          cd "$POM_DIR" || exit 1
+
           echo "Current directory:"
           pwd
           echo "Listing files:"
           ls -la
 
+          # Запускаем Maven с SonarQube
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=Kiba-24_Transport
