@@ -37,8 +37,15 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build and analyze
-        working-directory: ./Transport2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-             -Dsonar.projectKey=Kiba-24_Transport
+        run: |
+          echo "Switching to Transport2 directory"
+          cd Transport2
+          echo "Current directory:"
+          pwd
+          echo "Listing files:"
+          ls -la
+
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=Kiba-24_Transport
