@@ -13,7 +13,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
     </properties>
-
+    <properties>
+        <sonar.organization>kiba-24</sonar.organization>
+    </properties>
+         
     <dependencies>
         <dependency>
             <groupId>com.opencsv</groupId>
